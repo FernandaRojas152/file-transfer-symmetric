@@ -36,6 +36,7 @@ public class Server {
 	private String clientSHA;
 	private String targetFileName;
 	private String encryptedFilePath;
+	public static String SERVER_FOLDER = "../ServerFiles/";
 
 	private Key serverKey;
 
@@ -43,7 +44,7 @@ public class Server {
 		port = 9090;
 		serverSHA = "";
 		targetFileName = "";
-		encryptedFilePath = "src/serverFiles/encryptedReceivedFile.txt";
+		encryptedFilePath = "../ServerFiles/encryptedReceivedFile.txt";
 	}
 
 	public static void main(String[] args) {
@@ -123,7 +124,7 @@ public class Server {
 			byte[] decrypted = cipher.doFinal(encrypted);
 			decryptedFile = new String(decrypted);
 			
-			writeFile(new File("src/serverFiles/" + targetFileName), decryptedFile.getBytes());
+			writeFile(new File("../ServerFiles/" + targetFileName), decryptedFile.getBytes());
 
 			// String digest = DigestUtils.sha1Hex((is));
 			MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -134,7 +135,7 @@ public class Server {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		System.out.println("Are the SHA's equals between them: "+compareSHAS());
 		return decryptedFile;
 	}
 

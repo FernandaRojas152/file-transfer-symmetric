@@ -6,6 +6,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,6 +37,7 @@ public class Client {
 	private DataOutputStream out;
 	private DataInputStream in;
 	private Key key;
+	public static String CLIENT_FOLDER = "../ClientFiles/";
 
 	public Client() {
 		clientHost = "Fer";
@@ -43,7 +45,38 @@ public class Client {
 		hash = "";
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
+		
+		Client client = new Client();
+		client.connect();
+		
+		BufferedReader br = new BufferedReader( new InputStreamReader(System.in));
+		
+		try {
+			client.initializeDiffieHelman();
+			System.out.println("Coloque el nombre del archivo(tiene que estar presente dentro del proyecto)");
+			String filename = br.readLine();
+			
+			
+			
+			
+			
+			System.out.println("Deseea encriptar y enviar el archivo ? Si = 1, No = 0");
+			
+			int ansEnc = br.read();
+			if(ansEnc != 1) {
+				System.exit(0);
+				
+			}
+			client.generateSHA256(CLIENT_FOLDER, filename);
+			
+			
+			
+		
+			
+		}catch(Exception e) {
+			e.getStackTrace();
+		}
 
 	}
 
