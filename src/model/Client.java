@@ -10,6 +10,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -76,7 +82,7 @@ public class Client{
 	  public void generateSHA256(String parentDirectoryPath, String fileName) throws Exception {
 	        String fullPath = parentDirectoryPath + "\\" + fileName;
 	        System.out.println(fullPath);
-	        byte[] encryptedData = encryptFile(fullPath);
+	        //byte[] encryptedData = encryptFile(fullPath);
 	        //Se escriben los datos encripdatos localmente
 	        String encryptedFilePath = parentDirectoryPath + "\\" + "clientFileEncrypted.txt";
 	        File encryptedFile = new File(encryptedFilePath);
@@ -101,12 +107,20 @@ public class Client{
 	        out.writeUTF("exit");
 	    }
 
-	private byte[] encryptFile(String fullPath) {
-		// TODO Auto-generated method stub
-		return null;
+	private String encryptFile(String fullPath, Key secretKey) throws NoSuchAlgorithmException, NoSuchPaddingException {
+		Cipher cipher= Cipher.getInstance("AES");	
+		byte[] textByte= fullPath.getBytes();
+		String encryptedFile= "";
+		
+		try {
+			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+			byte[] encrypted= cipher.doFinal(textByte);
+			Base64.Encoder encoder= Base64.getEncoder();
+			encryptedFile= encoder.encodeToString(encrypted);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return encryptedFile;
 	}
-	
-	
-	
-
 }

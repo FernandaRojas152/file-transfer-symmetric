@@ -5,7 +5,11 @@ import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Server{
@@ -31,18 +35,8 @@ public class Server{
 		return port;
 	}
 
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-
 	public String getHash() {
 		return hash;
-	}
-
-
-	public void setHash(String hash) {
-		this.hash = hash;
 	}
 
 
@@ -55,14 +49,8 @@ public class Server{
 		this.serverSocket = serverSocket;
 	}
 
-
 	public Socket getClientSocket() {
 		return clientSocket;
-	}
-
-
-	public void setClientSocket(Socket clientSocket) {
-		this.clientSocket = clientSocket;
 	}
 
 
@@ -71,18 +59,10 @@ public class Server{
 	}
 
 
-	public void setServerSHA(String serverSHA) {
-		this.serverSHA = serverSHA;
-	}
-
-
 	public String getClientSHA() {
 		return clientSHA;
 	}
 
-	public void setClientSHA(String clientSHA) {
-		this.clientSHA = clientSHA;
-	}
 	
 	public void start() {
 		try {
@@ -108,5 +88,21 @@ public class Server{
 			System.out.println("Error while generating key" + e);	
 		}
 		return null;
+	}
+	
+	public String decryptFile(String filePath, Key secretKey) throws NoSuchAlgorithmException, NoSuchPaddingException {
+		Cipher cipher= Cipher.getInstance("AES");
+		Base64.Decoder decoder= Base64.getDecoder();
+		byte[] encrypted= decoder.decode(filePath);
+		String decryptedFile="";
+		try {
+			cipher.init(Cipher.DECRYPT_MODE, secretKey);
+			byte[] decrypted= cipher.doFinal(encrypted);
+			decryptedFile= new String(decrypted);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return decryptedFile;
 	}
 }
