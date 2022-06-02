@@ -1,10 +1,13 @@
 package model;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -51,10 +54,9 @@ public class Server {
 		Server server = new Server();
         server.start();
         
-        int interruptSignal = -1;
         while (true) {
             try {
-                if ((interruptSignal = server.awaitCommand()) == 1) break;
+                if (server.awaitCommand() == 1) break;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -112,11 +114,17 @@ public class Server {
 		return null;
 	}
 
-	public String decryptFile(String filePath, Key secretKey) throws NoSuchAlgorithmException, NoSuchPaddingException {
-
+	public String decryptFile(String filePath, Key secretKey) throws NoSuchAlgorithmException, NoSuchPaddingException, IOException {
+		File toDecrypt = new File(SERVER_FOLDER+filePath);
+		String enc = "";
+		String other = "";
+		BufferedReader obj = new BufferedReader(new FileReader(toDecrypt));
+		while((other = obj.readLine())!=null) {
+			enc += other;
+		}
 		Cipher cipher = Cipher.getInstance("AES");
 		Base64.Decoder decoder = Base64.getDecoder();
-		byte[] encrypted = decoder.decode(filePath);
+		byte[] encrypted = decoder.decode(enc);
 		String decryptedFile = "";
 		try {
 
@@ -135,6 +143,8 @@ public class Server {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("SHA Client: "+clientSHA);
+		System.out.println("SHA Server: "+serverSHA);
 		System.out.println("Are the SHA's equals between them: "+compareSHAS());
 		return decryptedFile;
 	}

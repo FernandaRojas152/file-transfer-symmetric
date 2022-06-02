@@ -40,41 +40,32 @@ public class Client {
 	public static String CLIENT_FOLDER = "../ClientFiles/";
 
 	public Client() {
-		clientHost = "Fer";
+		clientHost = "127.0.0.1";
 		port = 9090;
 		hash = "";
 	}
 
-	public static void main(String[] args) throws Exception{
-		
+	public static void main(String[] args) throws Exception {
+
 		Client client = new Client();
 		client.connect();
-		
-		BufferedReader br = new BufferedReader( new InputStreamReader(System.in));
-		
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
 		try {
 			client.initializeDiffieHelman();
 			System.out.println("Coloque el nombre del archivo(tiene que estar presente dentro del proyecto)");
 			String filename = br.readLine();
-			
-			
-			
-			
-			
+
 			System.out.println("Deseea encriptar y enviar el archivo ? Si = 1, No = 0");
-			
-			int ansEnc = br.read();
-			if(ansEnc != 1) {
+
+			int ansEnc = Integer.valueOf(br.readLine());
+			if (ansEnc != 1) {
 				System.exit(0);
-				
 			}
 			client.generateSHA256(CLIENT_FOLDER, filename);
-			
-			
-			
-		
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.getStackTrace();
 		}
 
@@ -149,7 +140,7 @@ public class Client {
 		hash = digest;
 		out.writeUTF(digest);
 		System.out.println("full path: " + fullPath);
-		System.out.println("Sha1 of unencrypted file: " + digest);
+		System.out.println("Sha-256 of unencrypted file: " + digest);
 
 		// Tells server to stop listening
 		out.writeUTF("exit");

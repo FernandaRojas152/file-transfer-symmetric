@@ -7,7 +7,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class GenKeys {
 	public Key generateKey(byte[] sharedKey){
-		String AESKeyFilename = "src/files/AESKeyFile.txt";
+		String AESKeyFilename = "../Files/AESKeyFile.txt";
 		
         byte[] byteKey = new byte[16];
         for(int i = 0; i < 16; i++) {
