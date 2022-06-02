@@ -18,7 +18,6 @@ public class Server{
 	public Server() {
 		// TODO Auto-generated constructor stub
 	}
-
 	
 	public static void main(String[] args) {
 		
@@ -83,7 +82,4 @@ public class Server{
 	public void setClientSHA(String clientSHA) {
 		this.clientSHA = clientSHA;
 	}
-	
-	
-
 }
