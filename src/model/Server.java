@@ -7,7 +7,6 @@ import java.net.Socket;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
-
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
@@ -74,20 +73,6 @@ public class Server{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public Key generateKey(byte[] key){
-		byte[] byteKey= new byte[16];
-		for (int i = 0; i < 16; i++) {
-			byteKey[i]= key[i];
-		}
-		try {
-			Key keyAES= new SecretKeySpec(byteKey, "AES");
-			return keyAES;
-		} catch (Exception e) {
-			System.out.println("Error while generating key" + e);	
-		}
-		return null;
 	}
 	
 	public String decryptFile(String filePath, Key secretKey) throws NoSuchAlgorithmException, NoSuchPaddingException {
